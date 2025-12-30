@@ -1,0 +1,64 @@
+service: doc-qa-backend
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    HUGGINGFACE_API_KEY: ${env:HUGGINGFACE_API_KEY}
+    PINECONE_API_KEY: ${env:PINECONE_API_KEY}
+    PINECONE_INDEX: ${env:PINECONE_INDEX}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
+        - ${env:FRONTEND_URL, 'http://localhost:3000'}
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - POST
+        - OPTIONS
+
+functions:
+  ingest:
+    handler: src/handlers/ingest.handler
+    timeout: 60
+    memorySize: 512
+    events:
+      - httpApi:
+          path: /ingest
+          method: post
+
+  ask:
+    handler: src/handlers/ask.handler
+    timeout: 30
+    memorySize: 256
+    events:
+      - httpApi:
+          path: /ask
+          method: post
+
+plugins:
+  - serverless-esbuild
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+custom:
+  dotenv:
+    path: .env
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    target: node20
+    platform: node
+    concurrency: 10
+  serverless-offline:
+    httpPort: 3001
+    lambdaPort: 3002
+    host: 0.0.0.0
+
