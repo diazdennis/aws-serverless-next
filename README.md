@@ -320,6 +320,65 @@ The API returns consistent error responses:
 6. **Free Tier Limits**: HuggingFace free tier has rate limits (~1000 requests/day). Production would need paid tier or alternative provider.
 
 
+### If I Had More Time, I Would Add...
+
+1. **Async Ingestion with SQS**
+   - Write document metadata to DynamoDB
+   - Publish message to SQS queue
+   - Separate Lambda processes chunks asynchronously
+   - Status endpoint to check ingestion progress
+
+2. **File Upload Support**
+   - S3 pre-signed URLs for direct upload
+   - Azure Document Intelligence for PDF/DOCX
+   - File type detection and routing
+
+3. **Better RAG**
+   - Hybrid search (keyword + semantic)
+   - Re-ranking with cross-encoder
+   - Query expansion/reformulation
+   - Metadata filtering
+
+4. **Production Features**
+   - API key authentication
+   - Rate limiting
+   - CloudWatch metrics and alarms
+   - X-Ray tracing
+   - Response streaming for long answers
+
+5. **UI Improvements**
+   - Document management (list, delete)
+   - Chat history
+   - Source highlighting
+   - Dark/light mode toggle
+
+6. **Multi-tenancy & Workspaces**
+   - User/organization isolation
+   - Separate Pinecone namespaces per tenant
+   - Workspace-level access controls
+   - Document sharing between workspaces
+
+7. **Caching & Performance**
+   - Redis/ElastiCache for query result caching
+   - Embedding cache for frequently asked questions
+   - CDN for static assets
+   - Lambda provisioned concurrency for cold starts
+   - Query result pagination
+
+8. **Multi-language Support**
+    - Automatic language detection
+    - Language-specific embedding models
+    - Translation for cross-language queries
+    - Multi-language document support
+
+9. **Document Management**
+    - Document versioning and history
+    - Bulk operations (delete, update multiple docs)
+    - Document tags and categories
+    - Search/filter documents by metadata
+    - Document expiration/archival policies
+
+
 ## Testing
 
 The backend includes Jest unit tests for:
